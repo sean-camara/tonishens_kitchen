@@ -1,0 +1,192 @@
+/* sales-report-style.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #fdac95, #FBF9F8);
+    margin: 0;
+    padding: 0;
+    color: #2D2D2D;
+    animation: fadeInBody 0.8s ease-in-out;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 2rem;
+    animation: slideInUp 0.9s ease-in-out;
+}
+
+/* Header (Title + Back button) */
+.sr-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.sr-header h1 {
+    font-size: 2rem;
+    color: #FF7750;
+    margin: 0;
+    animation: fadeIn 1s ease-in;
+}
+
+/* Back to Dashboard button styling */
+.back-btn {
+    display: inline-block;
+    background-color: #FF7750;
+    color: #FBF9F8;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 14px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    animation: fadeIn 1s ease-in;
+}
+.back-btn:hover {
+    background-color: #e56542;
+    transform: scale(1.05);
+}
+
+/* Filter section */
+.filter-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.filter-section label {
+    font-weight: 600;
+    color: #2D2D2D;
+}
+
+select, button {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 14px;
+    border: 1px solid #FF7750;
+    background-color: #FF7750;
+    color: #FBF9F8;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+select:hover, button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Chart section */
+.chart-section {
+    margin: 2rem 0;
+    animation: fadeIn 1s ease-in forwards;
+}
+
+canvas {
+    width: 100% !important;
+    max-height: 400px;
+    animation: fadeIn 1s ease-in;
+}
+
+/* Table section */
+.table-section {
+    overflow-x: auto;
+    animation: fadeInTable 1.2s ease-in-out;
+}
+
+.table-title {
+    font-size: 1.75rem;
+    color: #FF7750;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #FF7750;
+    padding-bottom: 0.3rem;
+    animation: fadeIn 1s ease-in;
+}
+
+/* Shared table styles */
+.sales-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    animation: slideInTable 1.3s ease-in-out;
+}
+
+.sales-table thead {
+    background-color: #FF7750;
+    color: #FBF9F8;
+}
+
+.sales-table th, 
+.sales-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    animation: fadeInRow 0.5s ease forwards;
+}
+
+.sales-table tbody tr:hover {
+    background-color: #FFECE6;
+    transition: background-color 0.3s;
+}
+
+/* Export section */
+.export-section {
+    margin-top: 2rem;
+    text-align: right;
+}
+
+/* Animations */
+@keyframes fadeInBody {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInTable {
+    from { transform: translateX(30px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeInTable {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeInRow {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .filter-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sr-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .table-title {
+        font-size: 1.5rem;
+    }
+} 

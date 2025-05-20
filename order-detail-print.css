@@ -1,0 +1,23 @@
+/* order-detail-print.css */
+
+body {
+  background: white !important;
+}
+
+.detail-header button,
+#saveStatusBtn {
+  display: none !important;
+}
+
+/* Ensure full width for printing */
+.detail-container {
+  margin: 0;
+  padding: 1rem;
+  box-shadow: none;
+}
+
+@media print {
+  .detail-container {
+    border: none;
+  }
+}

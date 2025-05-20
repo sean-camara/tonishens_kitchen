@@ -1,0 +1,299 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #fdac95, #FBF9F8);
+    color: #2D2D2D;
+}
+
+.nav-bar {
+    border-bottom: 2px solid #2d2d2d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 200px;
+    margin-right: 200px;
+    margin-bottom: 50px;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.nav-link {
+    font-size: 22px;
+}
+
+.nav-link li {
+    display: inline-block;
+    align-items: center;
+    margin: 30px;
+}
+
+.nav-link a {
+    text-decoration: none;
+    color: #2D2D2D;
+    transition: 0.2s ease;
+}
+
+.nav-link a:hover {
+    color: #FF7750;
+    text-decoration: underline;
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+}
+
+.icons i {
+    cursor: pointer;
+}
+
+#logo-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+h2 {
+    color: #2d2d2d;
+    font-size: 33px;
+    font-family: 'Playfair Display', serif;
+}
+
+#cart {
+    color: #4D4D4D;
+}
+
+#cart:hover {
+    color: #FF7750;
+    transition: 0.2s ease;
+}
+
+#user {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+/* ORDER CONTAINER */
+.orders-container {
+    max-width: 800px;
+    margin: auto;
+    background: #FBF9F8;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    animation: fade-in 0.5s ease-in-out;
+}
+
+/* ORDER CARD */
+.order-card {
+    background: white;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.order-card:hover {
+    transform: scale(1.02);
+}
+
+/* STATUS COLORS */
+.pending {
+    color: orange;
+    font-weight: 600;
+}
+
+.preparing {
+    color: #fb8c00; /* Blue */
+    font-weight: 600;
+}
+
+.on-the-way {
+    color: #6f42c1; /* Purple */
+    font-weight: 600;
+}
+
+.completed {
+    color: green;
+    font-weight: 600;
+}
+
+.canceled {
+    color: red;
+    font-weight: 600;
+}
+
+/* FEEDBACK FORM */
+.feedback-form {
+    margin-top: 15px;
+}
+
+.feedback-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.feedback-form button {
+    background-color: #FF7750;
+    color: #FBF9F8;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.feedback-form button:hover {
+    background-color: #e8663f;
+}
+
+/* STAR RATING */
+.star-rating {
+    display: flex;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 24px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #FF7750;
+}
+
+/* FADE-IN ANIMATION */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* … your existing CSS … */
+
+.dish-item {
+    margin-bottom: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+}
+
+.dish-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.dish-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.dish-name {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.dish-qty {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Re-use the star-rating styles from before */
+.star-rating {
+    display: flex;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 24px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #FF7750;
+}
+
+.feedback-form textarea {
+    /* already in your CSS; just ensure it's wide enough */
+    width: 100%;
+    margin-top: 8px;
+    resize: vertical;
+}
+
+.feedback-form button {
+    margin-top: 8px;
+    /* same styling as before */
+}
+
+/* Status colors for each class */
+.pending {
+    color: orange;
+    font-weight: 600;
+}
+.preparing {
+    color: #007bff; /* blue */
+    font-weight: 600;
+}
+.on-the-way {
+    color: #6f42c1; /* purple */
+    font-weight: 600;
+}
+.completed {
+    color: green;
+    font-weight: 600;
+}
+.canceled {
+    color: red;
+    font-weight: 600;
+}

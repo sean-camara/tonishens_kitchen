@@ -1,0 +1,260 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins' , sans-serif
+}
+
+body {
+    background: linear-gradient(to right, #fdac95, #FBF9F8);
+    font-family: 'Open Sans', sans-serif;
+}
+
+.nav-bar {
+    border-bottom: 2px solid #2d2d2d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 200px;
+    margin-right: 200px;
+    margin-bottom: 50px;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.nav-link {
+    font-size: 22px;
+}
+
+.nav-link li {
+    display: inline-block;
+    align-items: center;
+    margin: 30px;
+}
+
+.nav-link a {
+    text-decoration: none;
+    color: #2D2D2D;
+    transition: 0.2s ease;
+}
+
+.nav-link a:hover {
+    color: #FF7750;
+    text-decoration: underline;
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+}
+
+.icons i {
+    cursor: pointer;
+}
+
+#logo-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+h2 {
+    color: #2d2d2d;
+    font-size: 33px;
+    font-family: 'Playfair Display', serif;
+}
+
+#cart {
+    color: #4D4D4D;
+}
+
+#cart:hover {
+    color: #FF7750;
+    transition: 0.2s ease;
+}
+
+#user {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.back-btn {
+    margin: 0 200px;
+}
+
+#back-btn, #confirm-btn, #popup-ok-btn {
+    background-color: #FF7750;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 20px;
+    color: #FBF9F8;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-size: 20px;
+    transition: 0.9 ease;
+}
+
+#popup-ok-btn:hover {
+    background-color: #ff5722;
+}
+
+#back-btn:hover {
+    background-color: #ff5722;
+}
+
+#confirm-btn:hover {
+    background-color: #ff5722;
+}
+
+/* Checkout Boxes Styling */
+.content-container {
+    margin: 0 200px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.checkout-box {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #FF7750;
+}
+
+.checkout-box h3 {
+    color: #2d2d2d;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.checkout-box label {
+    display: block;
+    margin-top: 12px;
+    font-size: 18px;
+    color: #333;
+}
+
+.checkout-box input[type="text"],
+.checkout-box textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
+
+.checkout-box textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.checkout-box button {
+    background-color: #FF7750;
+    color: #FBF9F8;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.checkout-box button:hover {
+    background-color: #ff5722;
+}
+
+.checkout-box input[type="radio"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+.checkout-box i {
+    margin-left: 8px;
+    color: #444;
+}
+
+.confirm-btn {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Order Summary Styling */
+.checkout-box h3 {
+    color: #2d2d2d;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.checkout-box p {
+    margin-bottom: 16px;
+    line-height: 1.5;
+    padding-left: 10px;
+    color: #444;
+    font-size: 17px;
+}
+
+.checkout-box p strong {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+/* Style horizontal line between items */
+.checkout-box hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 12px 0 16px 0;
+}
+
+/* Style specifically for Grand Total */
+.checkout-box p:last-of-type strong {
+    color: #FF7750;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* Overlay background */
+.order-popup {
+  display: none; /* hidden by default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  /* flex container for centering */
+  display: flex;
+}
+
+/* Popup box */
+.order-popup-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+}
+
+/* OK button */
+.popup-ok-btn {
+  padding: 10px 20px;
+  margin-top: 15px;
+  cursor: pointer;
+}

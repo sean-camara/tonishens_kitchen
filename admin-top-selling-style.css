@@ -1,0 +1,207 @@
+/* admin-top-selling-style.css */
+
+/* Import Poppins font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    /* Top‐tier gradient background */
+    background: linear-gradient(to right, #fdac95, #FBF9F8);
+    color: #2D2D2D;
+    margin: 0;
+    padding: 20px;
+    overflow-x: hidden;
+    animation: fadeInBody 1s ease-in-out;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    backdrop-filter: blur(10px);
+    animation: slideUp 1s ease-in-out;
+}
+
+/* Back button container & styling */
+.back-container {
+    margin-bottom: 20px;
+    animation: fadeIn 1s ease 0.3s forwards;
+    opacity: 0;
+}
+
+.back-btn {
+    display: inline-block;
+    background-color: #FF7750;
+    color: #FBF9F8;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-btn:hover {
+    background-color: #e56542;
+    transform: translateY(-2px);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #FF7750;
+    font-size: 2.5rem;
+    animation: fadeInHeading 1s ease;
+}
+
+.filter-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 10px;
+    animation: fadeIn 1s ease 0.5s forwards;
+    opacity: 0;
+}
+
+.filter-section label {
+    font-size: 1rem;
+    color: #2D2D2D;
+}
+
+select, button {
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 1rem;
+    border: none;
+    background-color: #FF7750;
+    color: #FBF9F8;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+select:hover, button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+#export-btn {
+    background-color: #FF7750;
+}
+
+.table-container {
+    overflow-x: auto;
+    margin-bottom: 30px;
+    animation: fadeIn 1s ease 0.7s forwards;
+    opacity: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    animation: slideInTable 1s ease 0.9s forwards;
+    opacity: 0;
+}
+
+th, td {
+    padding: 14px 18px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+    background-color: #FF7750;
+    color: #FBF9F8;
+    font-size: 1.1rem;
+}
+
+tr {
+    background-color: #ffffff;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+tr:hover {
+    background-color: #FFECE6;
+    transform: translateY(-2px);
+}
+
+img.dish-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+img.dish-img:hover {
+    transform: scale(1.1);
+}
+
+/* Chart container styling */
+#topSellingChart {
+    max-width: 100%;
+    margin: auto;
+    animation: fadeInChart 1s ease 1s forwards;
+    opacity: 0;
+}
+
+/* Animations */
+@keyframes fadeInBody {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInHeading {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+@keyframes slideInTable {
+    from {
+        transform: translateX(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInChart {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    .filter-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    select, button {
+        width: 100%;
+    }
+}

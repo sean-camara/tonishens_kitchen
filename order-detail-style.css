@@ -1,0 +1,164 @@
+/* order-detail-style.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to right, #fdac95, #FBF9F8);
+  margin: 0;
+  padding: 0;
+  color: #2D2D2D;
+}
+
+.detail-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  background: #FBF9F8;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.detail-header h1 {
+  font-size: 2rem;
+  color: #FF7750;
+  margin: 0;
+}
+
+/* Order Info */
+.order-info {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.order-info div {
+  flex: 1 1 45%;
+}
+
+.order-info p {
+  margin: 0.3rem 0;
+  font-size: 1rem;
+}
+
+/* Status dropdown & save button */
+#statusSelect {
+  padding: 0.4rem 0.8rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #FF7750;
+  margin-left: 0.5rem;
+}
+
+#saveStatusBtn {
+  background-color: #FF7750;
+  color: #FBF9F8;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#saveStatusBtn:hover {
+  background-color: #e56542;
+  transform: scale(1.02);
+}
+
+/* Items table */
+.items-section {
+  margin-bottom: 1.5rem;
+}
+
+.items-section h2 {
+  font-size: 1.5rem;
+  color: #FF7750;
+  margin-bottom: 0.8rem;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.items-table thead {
+  background-color: #FF7750;
+  color: #FBF9F8;
+}
+
+.items-table th, .items-table td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.95rem;
+}
+
+/* Notes section */
+.notes-section {
+  margin-bottom: 1.5rem;
+}
+
+.notes-section h2 {
+  font-size: 1.5rem;
+  color: #FF7750;
+  margin-bottom: 0.8rem;
+}
+
+.notes-section p {
+  font-size: 1rem;
+  background: #fff8f0;
+  padding: 0.8rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+/* Totals section */
+.total-section {
+  margin-bottom: 1.5rem;
+}
+
+.total-section h2 {
+  font-size: 1.5rem;
+  color: #FF7750;
+  margin-bottom: 0.8rem;
+}
+
+.total-section p {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Action button (print) */
+.action-btn.print {
+  background-color: #FF7750;
+  color: #FBF9F8;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.action-btn.print:hover {
+  background-color: #e56542;
+  transform: scale(1.02);
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .order-info {
+    flex-direction: column;
+  }
+}
