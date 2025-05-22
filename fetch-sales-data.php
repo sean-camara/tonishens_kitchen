@@ -1,7 +1,7 @@
 <?php
 // fetch-sales-data.php
 header('Content-Type: application/json');
-include 'connect.php'; // your users_db connection
+require 'connect.php'; // your users_db connection
 
 // 1) Read the filter (today/week/month/year/all) from POST
 $filter = $_POST['filter'] ?? 'all';

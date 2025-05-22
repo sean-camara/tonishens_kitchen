@@ -13,7 +13,7 @@ if (!$id || !$action) {
     exit;
 }
 
-include 'connect.php';
+require 'connect.php';
 
 // Fetch current qty
 $stmt = $conn->prepare("SELECT quantity FROM cart WHERE user_id=? AND dish_id=?");

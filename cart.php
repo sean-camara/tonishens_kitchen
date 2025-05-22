@@ -4,7 +4,7 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: sign-in.php");
     exit;
 }
-include 'connect.php';
+require 'connect.php';
 $user_id = $_SESSION['user_id'];
 
 // Handle batch removal
@@ -27,12 +27,31 @@ $sql = "
     JOIN dishes d ON c.dish_id=d.dish_id
    WHERE c.user_id=?
 ";
+
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $res = $stmt->get_result();
 $items = $res->fetch_all(MYSQLI_ASSOC);
+
+// Fetch user profile data
+$query = "SELECT fname, lname, address, mobile, profile_pic FROM users WHERE id = ?";
+$profile_stmt = $conn->prepare($query);
+$profile_stmt->bind_param("i", $user_id);
+$profile_stmt->execute();
+$profile_result = $profile_stmt->get_result();
+$user_data = $profile_result->fetch_assoc();
+
+if (!empty($user_data['profile_pic'])) {
+    // Convert BLOB to base64 encoded string
+    $imgData = base64_encode($user_data['profile_pic']);
+    // Use the correct MIME type (assuming jpeg/png, adjust accordingly)
+    $navbar_profile_pic = 'data:image/jpeg;base64,' . $imgData;
+} else {
+    $navbar_profile_pic = 'images/users.png'; // fallback image
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -45,19 +64,27 @@ $items = $res->fetch_all(MYSQLI_ASSOC);
 </head>
 <body>
   <div class="nav-bar">
-    <a href="home.php"><div class="logo">
-      <img id="logo-img" src="images/logo.jpg" alt="logo" />
-      <h2>Tonishen's Kitchen</h2>
-    </div></a>
-    <div class="nav-link">
-      <ul>
-        <li><a href="home.php">Home</a></li>
-        <li><a href="home-menu.php">Menu</a></li>
-        <li><a href="about.php">About</a></li>
-        <li><a href="my-orders.php">My Orders</a></li>
-      </ul>
+        <a href="home.php" style="text-decoration: none;">
+            <div class="logo">
+                <img id="logo-img" src="images/logo.jpg" alt="logo">
+                <h2>Tonishen's Kitchen</h2>
+            </div>
+        </a>
+
+        <div class="nav-link">
+            <ul>
+                <li><a href="home.php">Home</a></li>
+                <li><a href="home-menu.php">Menu</a></li>
+                <li><a href="about.php">About</a></li>
+                <li><a href="my-orders.php">My Orders</a></li>
+            </ul>
+        </div>
+
+        <div class="icons">
+            <i id="cart" class="fa-solid fa-cart-shopping fa-3x"></i>
+            <a href="profile.php"><img id="user" src="<?= $navbar_profile_pic ?>" alt="User image"></a>
+        </div>
     </div>
-  </div>
 
   <div class="back-btn">
     <a href="home-menu.php"><button id="back-btn">Back to Menu</button></a>

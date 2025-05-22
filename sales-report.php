@@ -1,5 +1,4 @@
-<!-- sales-report.php -->
-<?php include 'connect.php'; ?>
+<?php require 'connect.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,6 +48,11 @@
           <!-- JS will inject rows here -->
         </tbody>
       </table>
+    </section>
+
+    <!-- NEW: Grand Total Section -->
+    <section class="grandtotal-section">
+      <h2>Grand Total: ₱<span id="grandTotal">0.00</span></h2>
     </section>
 
     <section class="export-section">

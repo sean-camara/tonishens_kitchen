@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'connect.php';
+require 'connect.php';
 
 if (!isset($_SESSION['user_id']) || !isset($_GET['order_id'])) {
     header("Location: home.php");
@@ -16,7 +16,14 @@ $query->bind_param("i", $user_id);
 $query->execute();
 $result = $query->get_result();
 $user_data = $result->fetch_assoc();
-$navbar_profile_pic = !empty($user_data['profile_pic']) ? $user_data['profile_pic'] : 'images/user.png';
+if (!empty($user_data['profile_pic'])) {
+    // Convert BLOB to base64 encoded string
+    $imgData = base64_encode($user_data['profile_pic']);
+    // Use the correct MIME type (assuming jpeg/png, adjust accordingly)
+    $navbar_profile_pic = 'data:image/jpeg;base64,' . $imgData;
+} else {
+    $navbar_profile_pic = 'images/user.png'; // fallback image
+}
 
 // Check if feedback already exists for this order
 $check = $conn->prepare("SELECT 1 FROM feedback WHERE user_id = ? AND dish_id IN (
@@ -73,6 +80,7 @@ while ($row = $result->fetch_assoc()) {
                 <li><a href="home.php">Home</a></li>
                 <li><a href="home-menu.php">Menu</a></li>
                 <li><a href="#">About</a></li>
+                <li><a href="my-orders.php">My Orders</a></li>
             </ul>
         </div>
 

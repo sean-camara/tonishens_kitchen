@@ -75,25 +75,25 @@ tr:hover {
     text-decoration: none;
     padding: 6px 12px;
     border-radius: 8px;
-    color: white;
+    color: #FBF9F8;
     font-size: 14px;
     margin-right: 5px;
 }
 
 .edit-button {
-    background-color: #2d89e5;
+    background-color: blue;
 }
 
 .edit-button:hover {
-    background-color: #1c62b9;
+    background-color: rgb(85, 85, 255);
 }
 
 .delete-button {
-    background-color: #e52d2d;
+    background-color: red;
 }
 
 .delete-button:hover {
-    background-color: #b92121;
+    background-color: rgb(255, 120, 120);
 }
 
 .back-button {

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("connect.php");
+require 'connect.php';
 
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['count' => 0]);

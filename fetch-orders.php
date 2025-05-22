@@ -1,7 +1,7 @@
 <?php
-// fetch-orders.php
+
 header('Content-Type: application/json');
-include 'connect.php';
+require 'connect.php';
 
 // 1) Read filters from POST (if set)
 $status_filter = $_POST['status'] ?? 'all'; 

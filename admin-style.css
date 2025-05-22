@@ -1,4 +1,3 @@
-/* Reset margin and padding for all elements */
 * {
     margin: 0;
     padding: 0;
@@ -88,11 +87,12 @@ h3 {
 
 /* Profile picture */
 #profile-pic {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 50%;
     object-fit: cover; /* Keeps image proportionate */
+    border: 1px solid #FF7750;
 }
 
 /* Profile name */
@@ -229,22 +229,32 @@ button:hover {
 /* Adjust specific widths */
 .total-sales {
     width: 290px;
+    font-size: 40px;
+    font-weight: 600;
 }
 
 .total-orders {
     width: 290px;
+    font-size: 40px;
+    font-weight: 600;
 }
 
 .recent-order {
     width: 430px;
+    font-weight: 700;
 }
 
 .best-seller {
     width: 470px;
 }
 
+#best-dish {
+    font-size: 40px;
+    font-weight: 600;
+}
+
 .low-stock {
-    width: 360px; /* Added missing unit */
+    width: 360px;
     height: 240px;
 }
 
@@ -336,4 +346,12 @@ table, tr, td {
 .title {
     font-weight: 600;
     font-size: 24px;
+}
+
+#user-image-fb {
+    border-radius: 50%;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
+    object-fit: cover;      /* Ensures the image fills the circle without distortion */
+    width: 80px;            /* Optional: set a consistent size */
+    height: 80px;           /* Optional: match width for a perfect circle */
 }

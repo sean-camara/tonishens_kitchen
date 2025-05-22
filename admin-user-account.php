@@ -1,25 +1,30 @@
-<?php
-include 'connect.php';
-session_start();
-?>
+<?php require 'connect.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include 'includes/header.php'; ?>
-    <link rel="stylesheet" href="includes/user-style.css">
+  <meta charset="UTF-8">
+  <title>Admin Accounts</title>
+  <link rel="stylesheet" href="includes/user-style.css">
+  <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-    <div class="top-bar">
-        <h1>User Accounts</h1>
-        <button class="add-btn" onclick="alert('Modal coming soon!')">
-            <i class="fa fa-plus"></i> Add Admin
-        </button>
-    </div>
+<?php include("includes/header.php"); ?>
 
-    <?php include 'includes/user-table.php'; ?>
+<div class="container">
+  <button onclick="window.history.back()" class="back-btn">← Back</button>
 
-    <script src="includes/user-scripts.js"></script>
+  <h1>Admin Accounts</h1>
+  <div class="actions">
+    <button id="addAdminBtn"><i class="fa-solid fa-user-plus"></i> Add Admin</button>
+  </div>
+
+  <?php include("includes/admin-table.php"); ?>
+</div>
+
+<?php include("includes/admin-form.php"); ?>
+
+<script src="includes/admin-scripts.js"></script>
 </body>
 </html>

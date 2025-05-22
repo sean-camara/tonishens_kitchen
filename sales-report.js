@@ -5,6 +5,7 @@ const timeFilter      = document.getElementById('timeFilter');
 const reportTableBody = document.getElementById('reportTableBody');
 const exportBtn       = document.getElementById('exportBtn');
 const ctx             = document.getElementById('salesChart').getContext('2d');
+const grandTotalEl    = document.getElementById('grandTotal');
 
 let salesChart = null; // will hold the Chart.js instance
 
@@ -115,7 +116,23 @@ function updateTable(orderList) {
   });
 }
 
-// 4) Export table to CSV
+// 4) Calculate and display grand total of all orders
+function updateGrandTotal(orderList) {
+  if (!orderList || orderList.length === 0) {
+    grandTotalEl.textContent = '0.00';
+    return;
+  }
+  // Sum up total_amount from each order (ensure it's treated as a number)
+  const sum = orderList.reduce((acc, order) => {
+    // If total_amount comes as a string, convert to float:
+    const value = parseFloat(order.total_amount) || 0;
+    return acc + value;
+  }, 0);
+  // Display with two decimal places
+  grandTotalEl.textContent = sum.toFixed(2);
+}
+
+// 5) Export table to CSV
 function exportTableToCSV(filename = 'sales_report.csv') {
   const rows = Array.from(reportTableBody.querySelectorAll('tr'));
   if (rows.length === 0) {
@@ -152,17 +169,20 @@ function exportTableToCSV(filename = 'sales_report.csv') {
   URL.revokeObjectURL(url);
 }
 
-// 5) Main loader function
+// 6) Main loader function
 async function loadAndDisplayData() {
   const filter = timeFilter.value;
   const data   = await fetchSalesData(filter);
   if (data) {
+    // data.salesData → used for chart
+    // data.orderList → used for table + grand total
     updateChart(data.salesData);
     updateTable(data.orderList);
+    updateGrandTotal(data.orderList); // NEW: show the grand total
   }
 }
 
-// 6) Setup listeners on DOMContentLoaded
+// 7) Setup listeners on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
   // a) When filter changes, reload
   timeFilter.addEventListener('change', loadAndDisplayData);

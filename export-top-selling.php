@@ -1,8 +1,6 @@
 <?php
-// export-top-selling.php
-
 // 1) Include your DB connection
-require 'connect.php'; // Adjust path if needed
+require 'connect.php';
 
 // 2) Build the same “top selling” query
 $sql = "

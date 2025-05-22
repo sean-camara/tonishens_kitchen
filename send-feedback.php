@@ -2,7 +2,7 @@
 // send-feedback.php
 
 session_start();
-include 'connect.php';
+require 'connect.php';
 header('Content-Type: text/plain');
 
 if (!isset($_SESSION['user_id'])) {

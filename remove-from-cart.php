@@ -12,7 +12,7 @@ if (!$id) {
     exit;
 }
 
-include 'connect.php';
+require 'connect.php';
 $stmt = $conn->prepare("DELETE FROM cart WHERE user_id=? AND dish_id=?");
 $stmt->bind_param("ii",$user_id,$id);
 $stmt->execute();

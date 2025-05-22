@@ -1,56 +1,51 @@
 <?php
 session_start();
-include 'connect.php';
-
 header('Content-Type: application/json');
+require 'connect.php';
 
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
-    exit();
+// -------- History --------
+$history = "";
+if ($r = $conn->query("SELECT content FROM about_history LIMIT 1")) {
+    if ($row = $r->fetch_assoc()) {
+        $history = $row['content'];
+    }
+    $r->free();
 }
 
-$response = [
-    'success' => false,
-    'data' => []
-];
+// -------- Contacts --------
+$contacts = [];
+if ($r = $conn->query("SELECT `type`, `value` FROM about_contacts ORDER BY id")) {
+    while ($row = $r->fetch_assoc()) {
+        $contacts[] = $row;
+    }
+    $r->free();
+}
 
-// Fetch History
-$sql_history = "SELECT content FROM about_history LIMIT 1";
-$res_history = $conn->query($sql_history);
-$history = $res_history && $res_history->num_rows > 0 ? $res_history->fetch_assoc()['content'] : '';
-
-// Fetch Contact Info (assuming only 1 row)
-$sql_contact = "SELECT * FROM about_contact LIMIT 1";
-$res_contact = $conn->query($sql_contact);
-$contact = $res_contact && $res_contact->num_rows > 0 ? $res_contact->fetch_assoc() : [];
-
-// Fetch Social Media links (multiple rows)
-$sql_social = "SELECT platform, url FROM about_social_media";
-$res_social = $conn->query($sql_social);
+// -------- Social Media --------
 $social_media = [];
-if ($res_social && $res_social->num_rows > 0) {
-    while ($row = $res_social->fetch_assoc()) {
+if ($r = $conn->query("SELECT platform, url FROM social_media_contacts ORDER BY id")) {
+    while ($row = $r->fetch_assoc()) {
         $social_media[] = $row;
     }
+    $r->free();
 }
 
-// Fetch FAQs
-$sql_faq = "SELECT question, answer FROM about_faqs ORDER BY id ASC";
-$res_faq = $conn->query($sql_faq);
+// -------- FAQs --------
 $faqs = [];
-if ($res_faq && $res_faq->num_rows > 0) {
-    while ($row = $res_faq->fetch_assoc()) {
+if ($r = $conn->query("SELECT question, answer FROM about_faqs ORDER BY id")) {
+    while ($row = $r->fetch_assoc()) {
         $faqs[] = $row;
     }
+    $r->free();
 }
 
-$response['success'] = true;
-$response['data'] = [
-    'history' => $history,
-    'contact' => $contact,
-    'social_media' => $social_media,
-    'faqs' => $faqs
-];
-
-echo json_encode($response);
-exit();
+echo json_encode([
+    'success' => true,
+    'data'    => [
+        'history'      => $history,
+        'contacts'     => $contacts,
+        'social_media' => $social_media,
+        'faqs'         => $faqs,
+    ]
+]);
+exit;

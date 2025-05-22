@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-include("connect.php");
+require("connect.php");
 
 $user_id = $_SESSION['user_id'];
 
@@ -17,7 +17,14 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user_data = $result->fetch_assoc();
 
-$navbar_profile_pic = !empty($user_data['profile_pic']) ? $user_data['profile_pic'] : 'images/user.png';
+if (!empty($user_data['profile_pic'])) {
+    // Convert BLOB to base64 encoded string
+    $imgData = base64_encode($user_data['profile_pic']);
+    // Use the correct MIME type (assuming jpeg/png, adjust accordingly)
+    $navbar_profile_pic = 'data:image/jpeg;base64,' . $imgData;
+} else {
+    $navbar_profile_pic = 'images/users.png'; // fallback image
+}
 ?>
 
 <!DOCTYPE html>
@@ -50,9 +57,9 @@ $navbar_profile_pic = !empty($user_data['profile_pic']) ? $user_data['profile_pi
 
         <div class="icons">
             <a href="cart.php" class="cart-wrapper">
-  <i id="cart" class="fa-solid fa-cart-shopping fa-3x"></i>
-  <span id="cart-count" style="display: none;">0</span>
-</a>
+            <i id="cart" class="fa-solid fa-cart-shopping fa-3x"></i>
+            <span id="cart-count" style="display: none;">0</span>
+            </a>
             <a href="profile.php"><img id="user" src="<?= $navbar_profile_pic ?>" alt="User image"></a>
         </div>
 
@@ -66,7 +73,7 @@ $navbar_profile_pic = !empty($user_data['profile_pic']) ? $user_data['profile_pi
         </div>
 
         <div class="hero-img">
-            <img id="hero-img" src="images/hero-bg.png" alt="Hero image">
+            <img id="hero-img" src="images/hero-img.png" alt="Hero image">
         </div>
     </div>
 
@@ -113,7 +120,7 @@ $conn->close();
 
             <div class="about-container2">
                 <div class="about-img">
-                    <img id="about-img" src="images/about-img.png" alt="">
+                    <img id="about-img" src="images/About-img.jpg" alt="">
                 </div>
                 <div class="about-text">
                     <p id="about-welcome-text">Welcome to Tonishen's Kitchen!</p>
@@ -141,6 +148,7 @@ $conn->close();
                 <li><a href="home.php">Home</a></li>
                 <li><a href="home-menu.php">Menu</a></li>
                 <li><a href="about.php">About</a></li>
+                <li><a href="my-orders.php">My Orders</a></li>
             </ul>
         </div>
     </div>

@@ -6,17 +6,23 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     exit();
 }
 
-include 'connect.php';
+require 'connect.php';
 
-// 1) Get admin info
+// 1) Get admin info, including profile_pic blob
 $user_id = $_SESSION['user_id'];
-$query = "SELECT fname, lname, email FROM users WHERE id = ?";
+$query = "SELECT fname, lname, email, profile_pic FROM users_admin WHERE id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
-$stmt->bind_result($fname, $lname, $email);
+$stmt->bind_result($fname, $lname, $email, $profile_pic_blob);
 $stmt->fetch();
 $stmt->close();
+
+// Convert blob to base64 data URI
+$profile_pic_src = 'images/user.png';
+if (!empty($profile_pic_blob)) {
+    $profile_pic_src = 'data:image/jpeg;base64,' . base64_encode($profile_pic_blob);
+}
 
 // 2) Get total sales
 $salesQuery = "SELECT SUM(total_amount) AS total_sales FROM orders";
@@ -70,24 +76,38 @@ if ($result && $row = $result->fetch_assoc()) {
 $lowStockQuery = "SELECT item_name, stock_count FROM inventory WHERE stock_count <= 20";
 $lowStockItems = $conn->query($lowStockQuery);
 
-// 7) Get recent feedback
+// 7) Get recent feedback – pull the very latest feedback + author’s BLOB pic
+$feedback_name    = '';
+$feedback_email   = '';
+$feedback_comment = '';
+$feedback_rating  = 0;
+$feedback_pic_src = 'images/user.png'; // fallback avatar
+
 $fbQry = "
-    SELECT f.comment, f.rating, u.fname AS fb_fname, u.lname AS fb_lname, u.email AS fb_email, u.profile_pic AS fb_pic_blob
+    SELECT
+      f.comment,
+      f.rating,
+      u.fname       AS fb_fname,
+      u.lname       AS fb_lname,
+      u.email       AS fb_email,
+      u.profile_pic AS fb_pic_blob
     FROM feedback f
-    JOIN users u ON f.user_id = u.id
+    JOIN users   u ON f.user_id = u.id
     ORDER BY f.feedback_id DESC
-    LIMIT 1";
-$fbResult = $conn->query($fbQry);
-$fb_fname = $fb_lname = $fb_email = $fb_comment = $fb_rating = "";
-$fb_profile_pic_base64 = "";
-if ($fbResult && $r = $fbResult->fetch_assoc()) {
-    $fb_comment = $r['comment'];
-    $fb_rating = $r['rating'];
-    $fb_fname = $r['fb_fname'];
-    $fb_lname = $r['fb_lname'];
-    $fb_email = $r['fb_email'];
-    if (!empty($r['fb_pic_blob'])) {
-        $fb_profile_pic_base64 = 'data:image/jpeg;base64,' . base64_encode($r['fb_pic_blob']);
+    LIMIT 1
+";
+
+if ($fbRes = $conn->query($fbQry)) {
+    if ($r = $fbRes->fetch_assoc()) {
+        $feedback_comment = htmlspecialchars($r['comment']);
+        $feedback_rating  = intval($r['rating']);
+        $feedback_name    = htmlspecialchars($r['fb_fname'] . ' ' . $r['fb_lname']);
+        $feedback_email   = htmlspecialchars($r['fb_email']);
+
+        // if the blob column is non-null and non-empty, base64-encode it
+        if ($r['fb_pic_blob'] !== null && strlen($r['fb_pic_blob']) > 0) {
+            $feedback_pic_src = 'data:image/jpeg;base64,' . base64_encode($r['fb_pic_blob']);
+        }
     }
 }
 
@@ -122,7 +142,7 @@ $favorites = $conn->query($favQuery);
 
             <div class="profile">
                 <i id="mail" class="fa-solid fa-envelope fa-3x"></i>
-                <img id="profile-pic" src="images/user.png" alt="profile" />
+                <img id="profile-pic" src="<?php echo $profile_pic_src; ?>" alt="profile" />
                 <div class="pro-des">
                     <p id="prof-name"><?php echo htmlspecialchars($fname . ' ' . $lname); ?></p>
                     <p>@<?php echo htmlspecialchars($email); ?></p>
@@ -140,8 +160,8 @@ $favorites = $conn->query($favQuery);
                 <button id="sales-report-btn"><i class="fa-solid fa-money-bill"></i> Sales Report</button>
                 <button id="orders-btn"><i class="fa-solid fa-truck-fast"></i> Orders</button>
                 <button id="top-selling-btn"><i class="fa-solid fa-chart-simple"></i> Top Selling</button>
-                <button><i class="fa-solid fa-users"></i> User Account</button>
-                <button><i class="fa-solid fa-toolbox"></i> Inventory</button>
+                <button id="user-acc-btn"><i class="fa-solid fa-users"></i> User Account</button>
+                <button id="inventory"><i class="fa-solid fa-toolbox"></i> Inventory</button>
                 <button id="about-page-btn"><i class="fa-solid fa-info-circle"></i> About Page</button>
             </div>
 
@@ -193,27 +213,22 @@ $favorites = $conn->query($favQuery);
                     <div class="customer-fb">
                         <p class="title">Customer Feedback</p>
                         <div class="rating-prof">
-                            <img 
-                                id="user-image-fb" 
-                                src="<?php echo !empty($fb_profile_pic_base64) ? $fb_profile_pic_base64 : 'images/user.png'; ?>" 
-                                alt="user" 
-                            />
+                            <img id="user-image-fb" src="<?php echo $feedback_pic_src; ?>" alt="<?php echo $feedback_name; ?>" />
                             <div class="rating-prof-details">
-                                <p id="customer-fb-name"><?php echo htmlspecialchars("$fb_fname $fb_lname"); ?></p>
-                                <p id="prof-email">@<?php echo htmlspecialchars($fb_email); ?></p>
+                                <p id="customer-fb-name"><?php echo $feedback_name; ?></p>
+                                <p id="prof-email">@<?php echo $feedback_email; ?></p>
                                 <div class="stars">
-                                    <?php
-                                    for ($i = 1; $i <= 5; $i++) {
-                                        echo $i <= intval($fb_rating) ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>';
-                                    }
-                                    ?>
+                                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                                        <i class="fa-solid fa-star" style="color: <?= $i <= $feedback_rating ? '#fbc531' : '#dcdde1'; ?>"></i>
+                                    <?php endfor; ?>
                                 </div>
                             </div>
                         </div>
                         <div class="fb">
-                            <p><?php echo htmlspecialchars($fb_comment); ?></p>
+                            <p><?php echo $feedback_comment; ?></p>
                         </div>
                     </div>
+
 
                     <div class="customerf">
                         <p class="title">Customer Favorites</p>

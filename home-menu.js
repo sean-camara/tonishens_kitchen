@@ -1,110 +1,119 @@
 // home-menu.js
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   const cartCount = document.getElementById('cart-count');
+  const cards = document.querySelectorAll('.card');
+  const categorySelect = document.getElementById('category-select');
+  const categoryParagraph = document.getElementById('category-paragraph');
 
-  // refresh cart count on load (optional)
+  /* 1) Fetch and display cart count */
   fetch('get-cart-count.php')
-    .then(r => r.json())
+    .then(res => res.json())
     .then(data => {
       if (data.count > 0) {
         cartCount.textContent = data.count;
         cartCount.style.display = 'inline-block';
       }
     })
-    .catch(() => {});
+    .catch(() => {
+      /* Fail silently if fetch fails */
+    });
 
-  // ADD TO CART
+  /* 2) Animate cards with incremental delays */
+  cards.forEach((card, index) => {
+    card.style.animationDelay = `${index * 0.1 + 0.2}s`;
+    card.classList.add('fade-in-up');
+  });
+
+  /* 3) Handle “Add to Cart” button clicks */
   document.querySelectorAll('.cart-btn').forEach(btn => {
-    btn.addEventListener('click', function (e) {
-      e.preventDefault(); e.stopPropagation();
-      const id = this.closest('.card').dataset.id;
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const card = btn.closest('.card');
+      const id = card.dataset.id;
 
-      // animate
-      this.textContent = '✔ Added!';
-      this.style.background = '#28a745';
-      this.style.color = '#fff';
+      // Visual feedback
+      btn.textContent = '✔ Added!';
+      btn.style.background = '#28a745';
+      btn.style.color = '#fff';
+
       setTimeout(() => {
-        this.textContent = 'ADD TO CART';
-        this.style.background = '';
-        this.style.color = '';
+        btn.textContent = 'ADD TO CART';
+        btn.style.background = '';
+        btn.style.color = '';
       }, 1200);
 
+      // AJAX request to add to cart
       fetch('add-to-cart.php', {
         method: 'POST',
-        headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: 'dish_id=' + encodeURIComponent(id)
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `dish_id=${encodeURIComponent(id)}`
       })
-      .then(r => r.json())
-      .then(data => {
-        if (data.success) {
-          cartCount.textContent = data.count;
-          cartCount.style.display = 'inline-block';
-          cartCount.classList.remove('bump');
-          void cartCount.offsetWidth;
-          cartCount.classList.add('bump');
-        } else {
-          console.error(data.message);
-        }
-      })
-      .catch(console.error);
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            cartCount.textContent = data.count;
+            cartCount.style.display = 'inline-block';
+
+            // Bump animation
+            cartCount.classList.remove('bump');
+            void cartCount.offsetWidth; // trigger reflow
+            cartCount.classList.add('bump');
+          } else {
+            console.error(data.message);
+          }
+        })
+        .catch(console.error);
     });
   });
 
-  // BUY NOW (updated to use add-to-cart.php and redirect to cart.php)
+  /* 4) Handle “Buy Now” button clicks */
   document.querySelectorAll('.buy-btn').forEach(btn => {
-    btn.addEventListener('click', function (e) {
-      e.preventDefault(); e.stopPropagation();
-      const id = this.closest('.card').dataset.id;
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const card = btn.closest('.card');
+      const id = card.dataset.id;
 
-      this.textContent = '⏳…';
-      this.disabled = true;
+      // Indicate loading
+      btn.textContent = '⏳…';
+      btn.disabled = true;
 
       fetch('add-to-cart.php', {
         method: 'POST',
-        headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: 'dish_id=' + encodeURIComponent(id)
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `dish_id=${encodeURIComponent(id)}`
       })
-      .then(r => r.json())
-      .then(data => {
-        if (data.success) {
-          // redirect to cart page after adding to cart
-          window.location.href = 'cart.php';
-        } else {
-          alert(data.message || 'Purchase failed.');
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            window.location.href = 'cart.php';
+          } else {
+            alert(data.message || 'Purchase failed.');
+            btn.textContent = 'BUY NOW';
+            btn.disabled = false;
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert('Network error.');
           btn.textContent = 'BUY NOW';
           btn.disabled = false;
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        alert('Network error.');
-        btn.textContent = 'BUY NOW';
-        btn.disabled = false;
-      });
+        });
     });
   });
 
-  // CATEGORY FILTER
-  const categorySelect = document.getElementById('category');
-  const cards = document.querySelectorAll('.card');
-  const categoryParagraph = document.getElementById('category-paragraph');
-
+  /* 5) Category filtering */
   categorySelect.addEventListener('change', function () {
     const selected = this.value.toLowerCase();
 
     cards.forEach(card => {
       const cardCategory = card.dataset.category.toLowerCase();
-
-      if (selected === 'all' || cardCategory === selected) {
-        card.style.display = '';
-      } else {
-        card.style.display = 'none';
-      }
+      card.style.display = (selected === 'all' || cardCategory === selected) ? 'flex' : 'none';
     });
 
-    if (categoryParagraph) {
-      const formatted = selected.charAt(0).toUpperCase() + selected.slice(1);
-      categoryParagraph.textContent = `${formatted} Category`;
-    }
+    const labelText = (selected === 'all') ? 'All Categories'
+      : selected.charAt(0).toUpperCase() + selected.slice(1);
+    categoryParagraph.textContent = labelText;
   });
 });

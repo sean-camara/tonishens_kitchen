@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "❌ This page was not accessed through the form.";
 }
 
-include 'connect.php';
+require 'connect.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get data from the form

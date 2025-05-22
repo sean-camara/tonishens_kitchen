@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     exit();
 }
 
-include 'connect.php'; // ensures MySQL is set to UTC+8
+require 'connect.php'; // ensures MySQL is set to UTC+8
 
 // We’ll only need this page to output the HTML; JS will fetch data via AJAX.
 ?>

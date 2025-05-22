@@ -1,0 +1,251 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: linear-gradient(to right, #fdac95, #FBF9F8);
+  color: #2D2D2D;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  animation: fadeIn 0.8s ease;
+}
+
+/* Header */
+h1 {
+  font-size: 40px;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #FF7750;
+  font-weight: 700;
+}
+
+/* Action button */
+.actions {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.actions button {
+  background-color: #FF7750;
+  color: #FBF9F8;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(255, 119, 80, 0.2);
+}
+
+.actions button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(255, 119, 80, 0.3);
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  animation: fadeIn 0.8s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  padding: 18px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background-color: #FF7750;
+  color: #FBF9F8;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+td {
+  font-size: 15px;
+}
+
+tr:hover {
+  background-color: #FFF1ED;
+  transition: background 0.3s ease;
+}
+
+/* Profile picture */
+.profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #FF7750;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 30px;
+  border-radius: 14px;
+  width: 90%;
+  max-width: 500px;
+  animation: slideIn 0.4s ease;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border: 2px solid #FF7750;
+}
+
+/* Close Button */
+.closeBtn {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 26px;
+  cursor: pointer;
+  color: #FF7750;
+  transition: 0.3s ease;
+}
+
+.closeBtn:hover {
+  transform: rotate(90deg);
+}
+
+/* Form styles inside modal */
+form label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+  color: #2D2D2D;
+}
+
+form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  transition: border-color 0.3s ease;
+}
+
+form input:focus {
+  border-color: #FF7750;
+  outline: none;
+}
+
+form button {
+  margin-top: 25px;
+  background-color: #FF7750;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  font-size: 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  font-weight: 600;
+}
+
+form button:hover {
+  background-color: #e6623f;
+  transform: scale(1.02);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Edit Button */
+.editBtn {
+  background-color: #4CAF50; /* A friendly green */
+  color: #FBF9F8;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-right: 8px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.4s ease;
+}
+
+.editBtn:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+/* Delete Button */
+form button[name="delete_user"] {
+  background-color: #E74C3C;
+  color: #FBF9F8;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.4s ease;
+}
+
+form button[name="delete_user"]:hover {
+  background-color: #c0392b;
+  transform: scale(1.05);
+}
+
+.back-btn {
+  background-color: #FF7750;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #FBF9F8;
+  transition: background-color 0.3s ease;
+  margin-top: 40px;
+}
+
+.back-btn:hover {
+  background-color: #c0392b;
+}

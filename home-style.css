@@ -87,6 +87,9 @@ h2 {
     height: 80px;
     cursor: pointer;
     border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 2px solid #FF7750;
 }
 
 .hero {
@@ -310,6 +313,8 @@ h1 {
 #about-img {
     width: 700px;
     height: 450px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 #about-welcome-text {

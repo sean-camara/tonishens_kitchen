@@ -1,5 +1,5 @@
 <?php
-require_once 'connect.php';
+require 'connect.php';
 
 // 1. Total Sales
 $totalSalesQuery = "SELECT SUM(total_amount) AS total_sales FROM orders";

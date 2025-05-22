@@ -153,3 +153,9 @@ button:hover {
     font-size: 16px;
     margin-bottom: 15px;
 }
+
+#box2-img {
+    width: 450px;
+    border-radius: 15px;
+    object-fit: cover;
+}

@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-include("connect.php");
+require 'connect.php';
 
 $user_id = $_SESSION['user_id'];
 

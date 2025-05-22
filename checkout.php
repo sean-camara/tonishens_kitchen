@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_name = $_SESSION['user_name']; // Get the user's name from the session
 
-include("connect.php");
+require 'connect.php';
 
 $user_id = $_SESSION['user_id'];
 
@@ -24,9 +24,14 @@ $fname = $user_data['fname'];
 $lname = $user_data['lname'];
 $address = $user_data['address'];
 $mobile = $user_data['mobile'];
-$profile_pic = $user_data['profile_pic'] ?? 'images/default-avatar.png'; // fallback
-
-$navbar_profile_pic = !empty($user_data['profile_pic']) ? $user_data['profile_pic'] : 'images/user.png';
+if (!empty($user_data['profile_pic'])) {
+    // Convert BLOB to base64 encoded string
+    $imgData = base64_encode($user_data['profile_pic']);
+    // Use the correct MIME type (assuming jpeg/png, adjust accordingly)
+    $navbar_profile_pic = 'data:image/jpeg;base64,' . $imgData;
+} else {
+    $navbar_profile_pic = 'images/users.png'; // fallback image
+}
 ?>
 
 <!DOCTYPE html>
@@ -73,6 +78,7 @@ $navbar_profile_pic = !empty($user_data['profile_pic']) ? $user_data['profile_pi
                 <li><a href="home.php">Home</a></li>
                 <li><a href="home-menu.php">Menu</a></li>
                 <li><a href="about.php">About</a></li>
+                <li><a href="my-orders.php">My Orders</a></li>
             </ul>
         </div>
 

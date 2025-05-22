@@ -1,4 +1,3 @@
-// admin-top-selling.js
 document.addEventListener("DOMContentLoaded", () => {
     const filter = document.getElementById("filter");
     const exportBtn = document.getElementById("export-btn");

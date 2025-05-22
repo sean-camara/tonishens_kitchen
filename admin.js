@@ -1,4 +1,3 @@
-// admin.js
 document.addEventListener("DOMContentLoaded", () => {
     // Redirect to admin-menu.php when Menu button clicked
     const menuBtn = document.getElementById("menu-btn");
@@ -48,6 +47,22 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
 
+    // Redirect to admin-user-account.php when this button is clicked
+    const userAccBtn = document.getElementById("user-acc-btn");
+    if (userAccBtn) {
+        userAccBtn.addEventListener("click", () =>{
+            window.location.href = "admin-user-account.php";
+        });
+    }
+    
+    // Redirect to admin-inventory.php when this buttonis clicked
+    const inventory = document.getElementById("inventory");
+    if (inventory) {
+        inventory.addEventListener("click", () => {
+            window.location.href = "admin-inventory.php";
+        })
+    }
+
     // Fetch admin data and update dashboard
     fetch("admin-data.php")
         .then(res => {
@@ -55,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return res.json();
         })
         .then(data => {
+            console.log("Fetched admin data:", data);
             // Total Sales
             document.getElementById("sales").textContent = 
                 `₱${parseFloat(data.total_sales).toLocaleString()}`;

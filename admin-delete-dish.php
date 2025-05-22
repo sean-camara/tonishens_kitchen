@@ -1,5 +1,5 @@
 <?php
-require_once 'connect.php';
+require 'connect.php';
 
 $dish_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 

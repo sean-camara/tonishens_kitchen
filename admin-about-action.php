@@ -1,127 +1,99 @@
 <?php
-session_start();
-header('Content-Type: application/json');
-include 'connect.php';
+require 'connect.php';
 
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-    echo json_encode(['error' => 'Unauthorized']);
+$action = $_REQUEST['action'];
+
+function getInput($key) {
+    return trim($_POST[$key] ?? '');
+}
+
+if ($action === "save_history") {
+    $content = getInput("content");
+    $conn->query("DELETE FROM about_history");
+    $stmt = $conn->prepare("INSERT INTO about_history (content) VALUES (?)");
+    if (!$stmt) die("Prepare failed: " . $conn->error);
+    $stmt->bind_param("s", $content);
+    if (!$stmt->execute()) die("Execute failed: " . $stmt->error);
     exit;
 }
 
-$action = $_POST['action'] ?? '';
-
-function respond($data) {
-    echo json_encode($data);
-    exit;
-}
-
-switch ($action) {
-    case 'add-contact':
-        $ctype = trim($_POST['contact_type'] ?? '');
-        $cvalue = trim($_POST['contact_value'] ?? '');
-        if (!$ctype || !$cvalue) respond(['error' => 'Missing fields']);
-        $stmt = $conn->prepare("INSERT INTO about_contacts (type, value) VALUES (?, ?)");
-        $stmt->bind_param("ss", $ctype, $cvalue);
-        if ($stmt->execute()) {
-            respond([
-                'success' => true,
-                'id'      => $stmt->insert_id,
-                'type'    => $ctype,
-                'value'   => $cvalue
-            ]);
-        } else {
-            respond([
-                'error'     => 'Insert failed',
-                'sql_error' => $stmt->error
-            ]);
-        }
-        break;
-
-    case 'edit-contact':
-        $id = intval($_POST['id'] ?? 0);
-        $ctype = trim($_POST['contact_type'] ?? '');
-        $cvalue = trim($_POST['contact_value'] ?? '');
-        if (!$id || !$ctype || !$cvalue) respond(['error' => 'Missing fields']);
+if ($action === "save_contact") {
+    $id    = isset($_POST['id']) ? intval($_POST['id']) : null;
+    $type  = getInput("type");
+    $value = getInput("value");
+    if ($id) {
         $stmt = $conn->prepare("UPDATE about_contacts SET type=?, value=? WHERE id=?");
-        $stmt->bind_param("ssi", $ctype, $cvalue, $id);
-        if ($stmt->execute()) {
-            respond(['success' => true]);
-        } else {
-            respond([
-                'error'     => 'Update failed',
-                'sql_error' => $stmt->error
-            ]);
-        }
-        break;
+        if (!$stmt) die("Prepare failed: " . $conn->error);
+        $stmt->bind_param("ssi", $type, $value, $id);
+    } else {
+        $stmt = $conn->prepare("INSERT INTO about_contacts (type, value) VALUES (?, ?)");
+        if (!$stmt) die("Prepare failed: " . $conn->error);
+        $stmt->bind_param("ss", $type, $value);
+    }
+    if (!$stmt->execute()) die("Execute failed: " . $stmt->error);
+    exit;
+}
 
-    case 'delete-contact':
-        $id = intval($_POST['id'] ?? 0);
-        if (!$id) respond(['error' => 'Missing ID']);
-        $stmt = $conn->prepare("DELETE FROM about_contacts WHERE id=?");
-        $stmt->bind_param("i", $id);
-        if ($stmt->execute()) {
-            respond(['success' => true]);
-        } else {
-            respond([
-                'error'     => 'Delete failed',
-                'sql_error' => $stmt->error
-            ]);
-        }
-        break;
+if ($action === "delete_contact") {
+    $id = intval($_POST['id']);
+    $conn->query("DELETE FROM about_contacts WHERE id=$id");
+    exit;
+}
 
-    case 'add-faq':
-        $question = trim($_POST['question'] ?? '');
-        $answer   = trim($_POST['answer'] ?? '');
-        if (!$question || !$answer) respond(['error' => 'Missing fields']);
-        $stmt = $conn->prepare("INSERT INTO about_faqs (question, answer) VALUES (?, ?)");
-        $stmt->bind_param("ss", $question, $answer);
-        if ($stmt->execute()) {
-            respond([
-                'success'  => true,
-                'id'       => $stmt->insert_id,
-                'question' => $question,
-                'answer'   => $answer
-            ]);
-        } else {
-            respond([
-                'error'     => 'Insert failed',
-                'sql_error' => $stmt->error
-            ]);
-        }
-        break;
+if ($action === "save_social") {
+    $id       = isset($_POST['id']) ? intval($_POST['id']) : null;
+    $platform = getInput("platform");
+    $url      = getInput("url");
+    if ($id) {
+        $stmt = $conn->prepare("UPDATE social_media_contacts SET platform=?, url=? WHERE id=?");
+        if (!$stmt) die("Prepare failed: " . $conn->error);
+        $stmt->bind_param("ssi", $platform, $url, $id);
+    } else {
+        $stmt = $conn->prepare("INSERT INTO social_media_contacts (platform, url) VALUES (?, ?)");
+        if (!$stmt) die("Prepare failed: " . $conn->error);
+        $stmt->bind_param("ss", $platform, $url);
+    }
+    if (!$stmt->execute()) die("Execute failed: " . $stmt->error);
+    exit;
+}
 
-    case 'edit-faq':
-        $id = intval($_POST['id'] ?? 0);
-        $question = trim($_POST['question'] ?? '');
-        $answer   = trim($_POST['answer'] ?? '');
-        if (!$id || !$question || !$answer) respond(['error' => 'Missing fields']);
+if ($action === "delete_social") {
+    $id = intval($_POST['id']);
+    $conn->query("DELETE FROM social_media_contacts WHERE id=$id");
+    exit;
+}
+
+if ($action === "save_faq") {
+    $id       = isset($_POST['id']) ? intval($_POST['id']) : null;
+    $question = getInput("question");
+    $answer   = getInput("answer");
+    if ($id) {
         $stmt = $conn->prepare("UPDATE about_faqs SET question=?, answer=? WHERE id=?");
+        if (!$stmt) die("Prepare failed: " . $conn->error);
         $stmt->bind_param("ssi", $question, $answer, $id);
-        if ($stmt->execute()) {
-            respond(['success' => true]);
-        } else {
-            respond([
-                'error'     => 'Update failed',
-                'sql_error' => $stmt->error
-            ]);
-        }
-        break;
+    } else {
+        $stmt = $conn->prepare("INSERT INTO about_faqs (question, answer) VALUES (?, ?)");
+        if (!$stmt) die("Prepare failed: " . $conn->error);
+        $stmt->bind_param("ss", $question, $answer);
+    }
+    if (!$stmt->execute()) die("Execute failed: " . $stmt->error);
+    exit;
+}
 
-    case 'delete-faq':
-        $id = intval($_POST['id'] ?? 0);
-        if (!$id) respond(['error' => 'Missing ID']);
-        $stmt = $conn->prepare("DELETE FROM about_faqs WHERE id=?");
-        $stmt->bind_param("i", $id);
-        if ($stmt->execute()) {
-            respond(['success' => true]);
-        } else {
-            respond([
-                'error'     => 'Delete failed',
-                'sql_error' => $stmt->error
-            ]);
-        }
-        break;
+if ($action === "delete_faq") {
+    $id = intval($_POST['id']);
+    $conn->query("DELETE FROM about_faqs WHERE id=$id");
+    exit;
+}
 
-    default:
-        respond(['error' => 'Invalid action']);
+if ($action === "load_all") {
+    $out = [];
+    $his = $conn->query("SELECT content FROM about_history LIMIT 1")->fetch_assoc();
+    $out['history']  = $his['content'] ?? "";
+    $out['contacts'] = $conn->query("SELECT id,type,value FROM about_contacts")->fetch_all(MYSQLI_ASSOC);
+    $out['socials']  = $conn->query("SELECT id,platform,url FROM social_media_contacts")->fetch_all(MYSQLI_ASSOC);
+    $out['faqs']     = $conn->query("SELECT id,question,answer FROM about_faqs")->fetch_all(MYSQLI_ASSOC);
+    header('Content-Type: application/json');
+    echo json_encode($out);
+    exit;
 }

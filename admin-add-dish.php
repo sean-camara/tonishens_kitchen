@@ -1,5 +1,5 @@
 <?php
-require_once 'connect.php';
+require 'connect.php';
 
 $nameErr = $priceErr = $imageErr = $descErr = $catErr = "";
 $dish_name = $price = $description = $category = "";
@@ -88,7 +88,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Add New Dish</title>
     <link rel="stylesheet" href="admin-menu-style.css" />
     <style>
-        /* Your existing CSS styles */
         body {
             color: #2d2d2d;
         }

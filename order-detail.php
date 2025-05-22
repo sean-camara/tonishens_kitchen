@@ -1,5 +1,4 @@
 <?php
-// order-detail.php
 session_start();
 
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
@@ -7,7 +6,7 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     exit();
 }
 
-include 'connect.php';
+require 'connect.php';
 
 // Get order_id from query
 if (!isset($_GET['order_id'])) {

@@ -1,121 +1,129 @@
 <?php
 session_start();
-
-// 1) Redirect if not logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: sign-in.php");
-    exit();
+  header("Location: sign-in.php");
+  exit();
 }
+require "connect.php";
 
-include "connect.php";
-
-// 2) Fetch the user’s profile picture
+// Nav-bar profile pic
 $user_id = $_SESSION['user_id'];
-$query = "SELECT profile_pic FROM users WHERE id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$user_data = $result->fetch_assoc();
-$stmt->close();
-$conn->close();
+$q = $conn->prepare("SELECT profile_pic FROM users WHERE id=?");
+$q->bind_param("i", $user_id);
+$q->execute();
+$res = $q->get_result()->fetch_assoc();
+$navbar_profile_pic = !empty($res['profile_pic'])
+  ? 'data:image/jpeg;base64,' . base64_encode($res['profile_pic'])
+  : 'images/users.png';
 
-// 3) Determine which image to show
-$navbar_profile_pic = !empty($user_data['profile_pic'])
-    ? $user_data['profile_pic']
-    : 'images/user.png';
-
-// 4) Load your about‑page content
+// Load dynamic about data
 include 'about-data.php';
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>About Us - Tonishen's Kitchen</title>
-    <link rel="stylesheet" href="about-style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About Us - Tonishen's Kitchen</title>
+  <!-- FontAwesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <!-- External CSS -->
+  <link rel="stylesheet" href="about-style.css" />
 </head>
 <body>
-
-    <div class="nav-bar">
-        <a href="home.php" style="text-decoration: none;">
-            <div class="logo">
-                <img id="logo-img" src="images/logo.jpg" alt="logo" />
-                <h2>Tonishen's Kitchen</h2>
-            </div>
-        </a>
-
-        <div class="nav-link">
-            <ul>
-                <li><a href="home.php">Home</a></li>
-                <li><a href="home-menu.php">Menu</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="my-orders.php">My Orders</a></li>
-            </ul>
-        </div>
-
-        <div class="icons">
-            <a href="cart.php" style="position: relative;">
-                <i id="cart" class="fa-solid fa-cart-shopping fa-3x"></i>
-                <span id="cart-count" style="
-                    position: absolute;
-                    top: -10px;
-                    right: -15px;
-                    background: #FF7750;;
-                    color: white;
-                    border-radius: 50%;
-                    padding: 4px 8px;
-                    font-size: 14px;
-                    display: none;
-                ">0</span>
-            </a>
-            <a href="profile.php"><img id="user" src="<?= $navbar_profile_pic ?>" alt="User image"></a>
-        </div>
+  <!-- NAVBAR -->
+  <header class="nav-bar fade-in-down">
+    <a href="home.php" class="logo-link">
+      <div class="logo">
+        <img id="logo-img" src="images/logo.jpg" alt="logo" />
+        <h2>Tonishen's Kitchen</h2>
+      </div>
+    </a>
+    <nav class="nav-link">
+      <ul>
+        <li><a href="home.php">Home</a></li>
+        <li><a href="home-menu.php">Menu</a></li>
+        <li><a href="about.php" class="active">About</a></li>
+        <li><a href="my-orders.php">My Orders</a></li>
+      </ul>
+    </nav>
+    <div class="icons">
+      <a href="cart.php" class="cart-wrapper">
+        <i id="cart" class="fa-solid fa-cart-shopping fa-3x"></i>
+        <span id="cart-count">0</span>
+      </a>
+      <a href="profile.php">
+        <img id="user" src="<?= htmlspecialchars($navbar_profile_pic) ?>" alt="User image" />
+      </a>
     </div>
+  </header>
 
-    <main class="container">
-        <section id="history" class="fade-in">
-            <h2>Our History</h2>
-            <p><?= nl2br(htmlspecialchars($store_history)) ?></p>
-        </section>
+  <main class="container">
+    <!-- HISTORY SECTION -->
+    <section id="history" class="fade-in">
+      <h2>Our History</h2>
+      <p><?= nl2br(htmlspecialchars($store_history)) ?></p>
+    </section>
 
-        <section id="contact" class="fade-in">
-            <h2>Contact Us</h2>
-            <ul>
-                <li><strong>Mobile:</strong> <?= htmlspecialchars($contact_info['mobile']) ?></li>
-                <li><strong>Telephone:</strong> <?= htmlspecialchars($contact_info['telephone']) ?></li>
-                <li><strong>Email:</strong> <a id="link" href="mailto:<?= htmlspecialchars($contact_info['email']) ?>"><?= htmlspecialchars($contact_info['email']) ?></a></li>
-                <li><strong>Address:</strong> <?= htmlspecialchars($contact_info['address']) ?></li>
-            </ul>
-            <div class="social-media">
-                <h3>Follow Us</h3>
-                <ul>
-                    <?php foreach ($social_media as $social): ?>
-                        <li><a href="<?= htmlspecialchars($social['url']) ?>" target="_blank" rel="noopener noreferrer"><?= htmlspecialchars($social['platform']) ?></a></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        </section>
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="fade-in">
+      <h2>Contact Us</h2>
+      <ul>
+        <?php foreach ($contacts as $c): ?>
+          <li>
+            <strong><?= htmlspecialchars($c['type']) ?>:</strong>
+            <?php if (strtolower($c['type']) === 'email'): ?>
+              <a id="email-link" href="mailto:<?= htmlspecialchars($c['value']) ?>">
+                <?= htmlspecialchars($c['value']) ?>
+              </a>
+            <?php else: ?>
+              <?= htmlspecialchars($c['value']) ?>
+            <?php endif; ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+      <div class="social-media">
+        <h3>Follow Us</h3>
+        <div class="social-buttons">
+          <?php foreach ($social_media as $s): ?>
+            <a
+              class="social-btn"
+              href="<?= htmlspecialchars($s['url']) ?>"
+              target="_blank"
+              rel="noopener"
+            >
+              <?= htmlspecialchars($s['platform']) ?>
+            </a>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    </section>
 
-        <section id="faqs" class="fade-in">
-            <h2>Frequently Asked Questions</h2>
-            <div class="faq-list">
-                <?php foreach ($faqs as $faq): ?>
-                    <details>
-                        <summary><?= htmlspecialchars($faq['question']) ?></summary>
-                        <p><?= htmlspecialchars($faq['answer']) ?></p>
-                    </details>
-                <?php endforeach; ?>
-            </div>
-        </section>
+    <!-- FAQ SECTION -->
+    <section id="faqs" class="fade-in">
+      <h2>FAQs</h2>
+      <div class="faq-list">
+        <?php foreach ($faqs as $f): ?>
+          <details>
+            <summary><?= htmlspecialchars($f['question']) ?></summary>
+            <p><?= htmlspecialchars($f['answer']) ?></p>
+          </details>
+        <?php endforeach; ?>
+      </div>
+    </section>
 
-        <section id="admin-note" class="fade-in">
-            <p><em><?= htmlspecialchars($admin_note) ?></em></p>
-        </section>
-    </main>
+    <!-- ADMIN NOTE -->
+    <section id="admin-note" class="fade-in">
+      <p><em><?= htmlspecialchars($admin_note) ?></em></p>
+    </section>
+  </main>
 
-    <script src="about-script.js"></script>
+  <script src="about-script.js"></script>
+  <script src="home.js"></script>
 </body>
 </html>

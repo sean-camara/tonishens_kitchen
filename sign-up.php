@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="box2">
-            <img src="images/Rectangle 22.png" alt="background image">
+            <img id="box2-img" src="images/About-img.jpg" alt="background image">
         </div>
     </div>
 </body>

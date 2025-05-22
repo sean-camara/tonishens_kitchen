@@ -5,7 +5,7 @@
 date_default_timezone_set('Asia/Manila');
 
 session_start();
-include 'connect.php'; // make sure connect.php sets MySQL to +08:00
+require 'connect.php'; // make sure connect.php sets MySQL to +08:00
 
 header('Content-Type: application/json'); // Set response type to JSON
 

@@ -15,10 +15,7 @@ if (!$dish_id) {
     exit();
 }
 
-include("connect.php");
-
-// Example: Insert or update cart item for user in DB
-// This depends on your DB schema. Here's a simple example:
+require 'connect.php';
 
 // Check if dish already in cart
 $stmt = $conn->prepare("SELECT quantity FROM cart WHERE user_id = ? AND dish_id = ?");

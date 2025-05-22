@@ -1,5 +1,5 @@
 <?php
-include 'connect.php';
+require 'connect.php';
 
 if (!isset($_GET['dish_id'])) {
     http_response_code(400);
