@@ -1,12 +1,5 @@
-/* ===================================================================
-   home-menu-style.css
-   - Modern card design, clean layout, and animations
-   =================================================================== */
-
-/* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display&family=Poppins&display=swap');
 
-/* --- Global Styles --- */
 * {
   margin: 0;
   padding: 0;
@@ -107,19 +100,29 @@ body {
   transform-origin: center;
 }
 
+#cart {
+    color: #4D4D4D;
+    transition: transform 0.3 ease;
+}
+
+#cart:hover {
+    color: #FF7750;
+    transform: scale(1.15);
+}
+
 #user {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 2px solid #FF7750;
-  transition: transform 0.3s ease;
-  cursor: pointer;
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 2px solid #FF7750;
+    transition: transform 0.2s ease;
 }
 
 #user:hover {
-  transform: scale(1.05);
+    transform: scale(1.05);
 }
 
 /* --- PAGE TITLE --- */

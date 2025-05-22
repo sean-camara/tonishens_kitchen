@@ -75,7 +75,7 @@ $dishes = $conn->query($sql);
 
     <div class="icons">
       <a href="cart.php" class="cart-icon">
-        <i class="fa-solid fa-cart-shopping fa-3x"></i>
+        <i id="cart" class="fa-solid fa-cart-shopping fa-3x"></i>
         <span id="cart-count">0</span>
       </a>
       <a href="profile.php">

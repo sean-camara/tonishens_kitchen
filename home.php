@@ -69,7 +69,7 @@ if (!empty($user_data['profile_pic'])) {
         <div class="hero-text">
             <h1>Welcome to <br> Tonishen's Kitchen</h1>
             <p id="hero-des">Home made flavors made with <br> passion. Order now and enjoy!</p>
-            <a href="home-menu.php"><button class="button" name="">Order now</button></a>
+            <a href="home-menu.php"><button id="order-now-btn" class="button" name="">Order now</button></a>
         </div>
 
         <div class="hero-img">

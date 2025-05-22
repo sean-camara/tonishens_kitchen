@@ -1,4 +1,28 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+// Redirect boxes
+document.querySelectorAll('.boxes > div').forEach(card => {
+  card.addEventListener('click', () => {
+    if (card.classList.contains('total-sales')) {
+      window.location.href = 'sales-report.php';
+    }
+    else if (card.classList.contains('best-seller')) {
+      window.location.href = 'admin-top-selling.php';
+    }
+    else if (card.classList.contains('total-orders')) {
+      window.location.href = 'orders.php';
+    }
+    else if (card.classList.contains('recent-order')) {
+      window.location.href = 'orders.php';
+    }
+    else if (card.classList.contains('low-stock')) {
+      window.location.href = 'admin-inventory.php';
+    }
+    // customer-fb & customerf do nothing on click
+  });
+});
+
+
   const btn      = document.getElementById('order-notif-btn');
   const badge    = document.getElementById('notif-badge');
   const dropdown = document.getElementById('order-dropdown');

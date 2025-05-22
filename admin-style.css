@@ -415,3 +415,12 @@ table, tr, td {
     color: #e74c3c;
     text-decoration: underline;
 }
+
+.boxes > div {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.boxes > div:hover {
+  transform: scale(1.05);
+}
