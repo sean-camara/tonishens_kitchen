@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.success) {
         message.style.display = "block";
         setTimeout(() => {
-          window.location.href = "home.php";
+          window.location.href = "my-orders.php";
         }, 2000);
       } else {
         alert("Failed to submit feedback. " + data.message);
