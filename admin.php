@@ -125,33 +125,42 @@ $favorites = $conn->query($favQuery);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link rel="stylesheet" href="admin-style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Playfair+Display&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="admin-style.css" />
 </head>
 <body>
-    <div class="container">
-        <div class="nav">
-            <div class="logo-wt">
-                <img id="logo" src="images/logo.jpg" alt="logo" />
-                <h3 id="logo-text">Tonishen's Kitchen</h3>
+  <div class="container">
+    <div class="nav">
+      <div class="logo-wt">
+        <img id="logo" src="images/logo.jpg" alt="logo" />
+        <h3 id="logo-text">Tonishen's Kitchen</h3>
+      </div>
+      <div class="profile">
+        <div class="mail-dropdown-wrapper">
+          <button id="order-notif-btn" class="icon-btn">
+            <i class="fa-solid fa-envelope fa-2x"></i>
+            <span id="notif-badge" class="badge" style="display:none">0</span>
+          </button>
+          <div id="order-dropdown" class="dropdown-panel">
+            <div id="order-list"></div>
+            <div class="dropdown-footer">
+              <a id="view-order" href="orders.php">View all orders ›</a>
             </div>
-
-            <div class="profile">
-                <i id="mail" class="fa-solid fa-envelope fa-3x"></i>
-                <img id="profile-pic" src="<?php echo $profile_pic_src; ?>" alt="profile" />
-                <div class="pro-des">
-                    <p id="prof-name"><?php echo htmlspecialchars($fname . ' ' . $lname); ?></p>
-                    <p>@<?php echo htmlspecialchars($email); ?></p>
-                </div>
-                <form action="logout.php" method="post">
-                    <button id="logout-btn">Logout</button>
-                </form>
-            </div>
+          </div>
         </div>
+        <img id="profile-pic" src="<?php echo $profile_pic_src; ?>" alt="profile" />
+        <div class="pro-des">
+          <p id="prof-name"><?php echo htmlspecialchars($fname . ' ' . $lname); ?></p>
+          <p>@<?php echo htmlspecialchars($email); ?></p>
+        </div>
+        <form action="logout.php" method="post">
+          <button id="logout-btn">Logout</button>
+        </form>
+      </div>
+    </div>
 
         <div class="category-con">
             <div class="category">

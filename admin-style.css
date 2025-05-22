@@ -1,7 +1,7 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box; /* Added for consistent sizing */
+    box-sizing: border-box;
 }
 
 /* Body style with gradient background and font */
@@ -18,7 +18,7 @@ body {
     border-radius: 15px;
     border: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 20px; /* Added padding for better spacing inside container */
+    padding: 20px;
     height: 800px;
 }
 
@@ -351,7 +351,67 @@ table, tr, td {
 #user-image-fb {
     border-radius: 50%;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
-    object-fit: cover;      /* Ensures the image fills the circle without distortion */
-    width: 80px;            /* Optional: set a consistent size */
-    height: 80px;           /* Optional: match width for a perfect circle */
+    object-fit: cover;      
+    width: 80px;            
+    height: 80px;       
+}
+
+/* notification dropdown */
+.mail-dropdown-wrapper { position: relative; }
+.icon-btn { background: none; border: none; cursor: pointer; }
+.badge {
+  position: absolute; 
+  top: -4px; 
+  right: -4px;
+  background: #e74c3c; 
+  color: white;
+  border-radius: 50%; 
+  padding: 2px 6px;
+  font-size: 0.75rem; 
+  display: inline-block;
+}
+@keyframes wiggle {
+  0%,100% { transform: rotate(0); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+.badge.wiggle { animation: wiggle 0.8s ease; }
+
+.dropdown-panel {
+  display: none;
+  position: absolute; 
+  top: 120%;
+  right: 0; 
+  width: 300px; 
+  max-height: 400px;
+  background: #FBF9F8; 
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 1000;
+  overflow-y: auto;
+}
+.order-row {
+  padding: 8px; 
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+.order-row:hover { background: #f9f9f9; }
+.dropdown-footer {
+  padding: 8px; 
+  text-align: center;
+  border-top: 1px solid #ddd;
+}
+@media (max-width:600px) {
+  .dropdown-panel { width: 100vw; left: 0; right: 0; }
+  .order-row { font-size: 1.1rem; padding: 12px; }
+}
+
+#view-order {
+    color:#FF7750;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+#view-order:hover {
+    color: #e74c3c;
+    text-decoration: underline;
 }
