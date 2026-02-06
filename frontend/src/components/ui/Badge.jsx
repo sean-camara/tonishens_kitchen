@@ -1,0 +1,10 @@
+import { statusColors } from '../../utils/helpers';
+
+export default function Badge({ children, variant, className = '' }) {
+  const colorClass = variant ? (statusColors[variant] || 'bg-stone-100 text-stone-800') : 'bg-stone-100 text-stone-800';
+  return (
+    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${colorClass} ${className}`}>
+      {children}
+    </span>
+  );
+}
