@@ -9,7 +9,7 @@ export default function AboutPage() {
   const [openFaq, setOpenFaq] = useState(null);
 
   useEffect(() => {
-    getAbout().then((res) => setData(res.data)).catch(() => {}).finally(() => setLoading(false));
+    getAbout().then((res) => setData(res.data.data || res.data)).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   if (loading) return <div className="flex justify-center py-20"><Spinner size="lg" /></div>;

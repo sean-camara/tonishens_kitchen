@@ -35,11 +35,11 @@ class CartController extends Controller
         return $this->success($cart->load('dish'), 'Added to cart');
     }
 
-    public function update(Request $request, Cart $cart): JsonResponse
+    public function update(Request $request, $dishId): JsonResponse
     {
-        if ($cart->user_id !== auth()->id()) {
-            return $this->error('Forbidden', 403);
-        }
+        $cart = Cart::where('user_id', auth()->id())
+            ->where('dish_id', $dishId)
+            ->firstOrFail();
 
         $request->validate(['quantity' => 'required|integer|min:1|max:99']);
         $cart->update(['quantity' => $request->quantity]);
@@ -47,11 +47,11 @@ class CartController extends Controller
         return $this->success($cart->load('dish'));
     }
 
-    public function destroy(Cart $cart): JsonResponse
+    public function destroy($dishId): JsonResponse
     {
-        if ($cart->user_id !== auth()->id()) {
-            return $this->error('Forbidden', 403);
-        }
+        $cart = Cart::where('user_id', auth()->id())
+            ->where('dish_id', $dishId)
+            ->firstOrFail();
 
         $cart->delete();
 

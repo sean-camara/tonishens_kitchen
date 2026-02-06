@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
     if (!token) { setLoading(false); return; }
     try {
       const { data } = await getMe();
-      setUser(data.user);
+      setUser(data.data || data.user);
     } catch {
       localStorage.removeItem('access_token');
       setUser(null);
@@ -43,11 +43,12 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin';
+  const isSuperAdmin = user?.role === 'super_admin';
   const isAuthenticated = !!user;
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, login, register, logout, isAdmin, isAuthenticated, fetchUser }}>
+    <AuthContext.Provider value={{ user, setUser, loading, login, register, logout, isAdmin, isSuperAdmin, isAuthenticated, fetchUser }}>
       {children}
     </AuthContext.Provider>
   );

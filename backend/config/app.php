@@ -25,10 +25,4 @@ return [
     'maintenance' => [
         'driver' => 'file',
     ],
-
-    'providers' => [
-        // Laravel Framework Service Providers
-    ],
-
-    'aliases' => [],
 ];

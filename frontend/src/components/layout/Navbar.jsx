@@ -1,7 +1,7 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useRef, useEffect } from 'react';
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon, ShoppingCartIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, ShoppingCartIcon, UserCircleIcon, ArrowRightOnRectangleIcon, ClipboardDocumentListIcon, UserIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 
@@ -22,13 +22,25 @@ export default function Navbar() {
   const { isAuthenticated, user, logout } = useAuth();
   const { cartCount } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef(null);
   const navigate = useNavigate();
   const links = isAuthenticated ? navLinks : guestLinks;
 
   const handleLogout = async () => {
+    setProfileOpen(false);
     await logout();
     navigate('/sign-in');
   };
+
+  // Close profile dropdown on outside click
+  useEffect(() => {
+    const handler = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) setProfileOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   const avatarUrl = user?.avatar_url || null;
 
@@ -38,7 +50,7 @@ export default function Navbar() {
         <div className="container-app flex h-16 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 shrink-0">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-600 text-white font-bold text-sm">TK</div>
+            <img src="/logo.jpg" alt="Tonishen's Kitchen" className="h-9 w-9 rounded-full object-cover" />
             <span className="hidden sm:block font-heading text-lg font-semibold text-stone-900">Tonishen's Kitchen</span>
           </Link>
 
@@ -72,13 +84,38 @@ export default function Navbar() {
                     </span>
                   )}
                 </Link>
-                <Link to="/profile" className="rounded-full overflow-hidden border-2 border-transparent hover:border-primary-300 transition-colors">
-                  {avatarUrl ? (
-                    <img src={avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
-                  ) : (
-                    <UserCircleIcon className="h-8 w-8 text-stone-400" />
+                {/* Profile Dropdown */}
+                <div className="relative" ref={profileRef}>
+                  <button
+                    onClick={() => setProfileOpen(!profileOpen)}
+                    className="rounded-full overflow-hidden border-2 border-transparent hover:border-primary-300 transition-colors"
+                  >
+                    {avatarUrl ? (
+                      <img src={avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
+                    ) : (
+                      <UserCircleIcon className="h-8 w-8 text-stone-400" />
+                    )}
+                  </button>
+                  {profileOpen && (
+                    <div className="absolute right-0 mt-2 w-52 rounded-xl border border-stone-200 bg-white shadow-lg py-1 z-50">
+                      <div className="px-4 py-2.5 border-b border-stone-100">
+                        <p className="text-sm font-semibold text-stone-900 truncate">{user?.first_name} {user?.last_name}</p>
+                        <p className="text-xs text-stone-500 truncate">{user?.email}</p>
+                      </div>
+                      <Link to="/profile" onClick={() => setProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 transition-colors">
+                        <UserIcon className="h-4 w-4 text-stone-400" /> My Account
+                      </Link>
+                      <Link to="/orders" onClick={() => setProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-stone-700 hover:bg-stone-50 transition-colors">
+                        <ClipboardDocumentListIcon className="h-4 w-4 text-stone-400" /> My Orders
+                      </Link>
+                      <div className="border-t border-stone-100">
+                        <button onClick={handleLogout} className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                          <ArrowRightOnRectangleIcon className="h-4 w-4" /> Sign Out
+                        </button>
+                      </div>
+                    </div>
                   )}
-                </Link>
+                </div>
               </>
             ) : (
               <div className="hidden sm:flex items-center gap-2">

@@ -58,12 +58,19 @@ export default function Accounts() {
                   {admin.first_name?.[0]}{admin.last_name?.[0]}
                 </div>
                 <div className="min-w-0">
-                  <p className="font-medium text-stone-800 truncate">{admin.first_name} {admin.last_name}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium text-stone-800 truncate">{admin.first_name} {admin.last_name}</p>
+                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                      admin.role === 'super_admin' ? 'bg-amber-100 text-amber-800' : 'bg-stone-100 text-stone-600'
+                    }`}>
+                      {admin.role === 'super_admin' ? 'Super Admin' : 'Admin'}
+                    </span>
+                  </div>
                   <p className="text-sm text-stone-500 truncate">{admin.email}</p>
                 </div>
               </div>
-              <button onClick={() => handleDelete(admin.id)} className="rounded-lg p-1.5 text-stone-400 hover:bg-red-50 hover:text-red-500 shrink-0">
-                <TrashIcon className="h-4 w-4" />
+              <button onClick={() => handleDelete(admin.id)} className="rounded-lg p-1.5 text-stone-400 hover:bg-red-50 hover:text-red-500 shrink-0" title={admin.role === 'super_admin' ? 'Cannot delete super admin' : 'Delete admin'} disabled={admin.role === 'super_admin'}>
+                <TrashIcon className={`h-4 w-4 ${admin.role === 'super_admin' ? 'opacity-30' : ''}`} />
               </button>
             </Card.Body>
           </Card>

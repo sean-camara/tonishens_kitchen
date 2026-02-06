@@ -11,12 +11,20 @@ class AdminAccountController extends Controller
 {
     public function index(): JsonResponse
     {
-        $admins = User::where('role', 'admin')->get();
+        if (!auth()->user()->isSuperAdmin()) {
+            return $this->error('Only super admins can manage accounts', 403);
+        }
+
+        $admins = User::whereIn('role', ['admin', 'super_admin'])->get();
         return $this->success($admins);
     }
 
     public function store(Request $request): JsonResponse
     {
+        if (!auth()->user()->isSuperAdmin()) {
+            return $this->error('Only super admins can create admin accounts', 403);
+        }
+
         $data = $request->validate([
             'first_name' => 'required|string|max:100',
             'last_name'  => 'required|string|max:100',
@@ -33,11 +41,15 @@ class AdminAccountController extends Controller
 
     public function destroy(User $user): JsonResponse
     {
+        if (!auth()->user()->isSuperAdmin()) {
+            return $this->error('Only super admins can delete admin accounts', 403);
+        }
+
         if ($user->id === auth()->id()) {
             return $this->error('Cannot delete yourself', 422);
         }
 
-        if ($user->role !== 'admin') {
+        if (!in_array($user->role, ['admin', 'super_admin'])) {
             return $this->error('User is not an admin', 422);
         }
 

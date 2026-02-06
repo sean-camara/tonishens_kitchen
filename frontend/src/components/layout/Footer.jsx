@@ -8,7 +8,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-white font-bold text-xs">TK</div>
+              <img src="/logo.jpg" alt="Tonishen's Kitchen" className="h-8 w-8 rounded-full object-cover" />
               <span className="font-heading text-lg font-semibold text-white">Tonishen's Kitchen</span>
             </div>
             <p className="text-sm text-stone-400 leading-relaxed">

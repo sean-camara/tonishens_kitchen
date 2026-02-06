@@ -39,7 +39,7 @@ export default function Profile() {
 
   useEffect(() => {
     getProfile().then(({ data }) => {
-      const u = data.user;
+      const u = data.data || data.user;
       profileForm.reset({ first_name: u.first_name, last_name: u.last_name, phone: u.phone || '', address: u.address || '' });
       setAvatarPreview(u.avatar_url);
     }).catch(() => {}).finally(() => setLoading(false));
@@ -49,7 +49,7 @@ export default function Profile() {
     setSavingProfile(true);
     try {
       const res = await updateProfile(data);
-      setUser(res.data.user);
+      setUser(res.data.data || res.data.user);
       toast.success('Profile updated');
     } catch { toast.error('Failed to update'); }
     finally { setSavingProfile(false); }
@@ -93,7 +93,7 @@ export default function Profile() {
   ];
 
   return (
-    <div className="container-app py-8 sm:py-12 max-w-2xl">
+    <div className="container-app py-8 sm:py-12 max-w-lg mx-auto">
       <h1 className="font-heading text-2xl font-bold text-stone-900 sm:text-3xl mb-6">My Account</h1>
 
       {/* Tabs */}

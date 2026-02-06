@@ -15,7 +15,17 @@ export function CartProvider({ children }) {
     setLoading(true);
     try {
       const { data } = await fetchCartApi();
-      setItems(data.items || []);
+      const raw = data.data || [];
+      // Flatten nested dish relation so Cart page can access item.name, item.price, etc.
+      setItems(raw.map((item) => ({
+        id: item.id,
+        dish_id: item.dish_id,
+        quantity: item.quantity,
+        name: item.dish?.name,
+        price: item.dish?.price,
+        image_path: item.dish?.image_path,
+        category: item.dish?.category?.name,
+      })));
     } catch { /* ignore */ }
     finally { setLoading(false); }
   }, [isAuthenticated, isAdmin]);

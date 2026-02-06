@@ -52,7 +52,7 @@ export default function SignUp() {
       <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
         <div className="w-full max-w-sm">
           <div className="mb-8 text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary-600 text-white font-bold text-lg">TK</div>
+            <img src="/logo.jpg" alt="Tonishen's Kitchen" className="mx-auto mb-4 h-12 w-12 rounded-full object-cover" />
             <h1 className="font-heading text-2xl font-bold text-stone-900 sm:text-3xl">Let's Get Started</h1>
             <p className="mt-1 text-sm text-stone-500">Create your account in seconds.</p>
           </div>

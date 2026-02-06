@@ -22,7 +22,7 @@ export const statusColors = {
 };
 
 export const getImageUrl = (path) => {
-  if (!path) return '/placeholder-dish.jpg';
+  if (!path) return '/placeholder-dish.svg';
   if (path.startsWith('http')) return path;
   return `/storage/${path}`;
 };

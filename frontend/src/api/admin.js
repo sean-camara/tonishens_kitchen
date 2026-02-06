@@ -20,16 +20,16 @@ export const deleteCategory = (id) => api.delete(`/admin/categories/${id}`);
 // Orders
 export const getAdminOrders = (params) => api.get('/admin/orders', { params });
 export const getAdminOrder = (id) => api.get(`/admin/orders/${id}`);
-export const updateOrderStatus = (id, status) => api.patch(`/admin/orders/${id}/status`, { status });
-export const bulkUpdateOrders = (ids, status) => api.patch('/admin/orders/bulk-status', { order_ids: ids, status });
+export const updateOrderStatus = (id, status) => api.put(`/admin/orders/${id}/status`, { status });
+export const bulkUpdateOrders = (ids, status) => api.post('/admin/orders/bulk-update', { order_ids: ids, status });
 
 // Inventory
-export const getIngredients = (params) => api.get('/admin/inventory', { params });
-export const createIngredient = (data) => api.post('/admin/inventory', data);
-export const updateIngredient = (id, data) => api.put(`/admin/inventory/${id}`, data);
-export const deleteIngredient = (id) => api.delete(`/admin/inventory/${id}`);
-export const getIngredientCategories = () => api.get('/admin/inventory/categories');
-export const createIngredientCategory = (data) => api.post('/admin/inventory/categories', data);
+export const getIngredients = (params) => api.get('/admin/ingredients', { params });
+export const createIngredient = (data) => api.post('/admin/ingredients', data);
+export const updateIngredient = (id, data) => api.put(`/admin/ingredients/${id}`, data);
+export const deleteIngredient = (id) => api.delete(`/admin/ingredients/${id}`);
+export const getIngredientCategories = () => api.get('/admin/ingredient-categories');
+export const createIngredientCategory = (data) => api.post('/admin/ingredient-categories', data);
 
 // Reports
 export const getSalesReport = (params) => api.get('/admin/reports/sales', { params });
@@ -53,6 +53,6 @@ export const deleteFaq = (id) => api.delete(`/admin/about/faqs/${id}`);
 export const getNotifications = () => api.get('/admin/notifications');
 
 // Admin accounts
-export const getAdmins = () => api.get('/admin/admins');
-export const createAdmin = (data) => api.post('/admin/admins', data);
-export const deleteAdmin = (id) => api.delete(`/admin/admins/${id}`);
+export const getAdmins = () => api.get('/admin/accounts');
+export const createAdmin = (data) => api.post('/admin/accounts', data);
+export const deleteAdmin = (id) => api.delete(`/admin/accounts/${id}`);

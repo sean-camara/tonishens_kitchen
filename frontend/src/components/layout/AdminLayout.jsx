@@ -1,12 +1,15 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect, useRef, useCallback } from 'react';
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
 import {
   Bars3Icon, XMarkIcon, HomeIcon, ClipboardDocumentListIcon,
   Squares2X2Icon, ArchiveBoxIcon, ChartBarIcon,
   InformationCircleIcon, UsersIcon, ArrowRightOnRectangleIcon, BellIcon,
+  CheckIcon,
 } from '@heroicons/react/24/outline';
 import { useAuth } from '../../context/AuthContext';
+import { getNotifications } from '../../api/admin';
+import api from '../../api/axios';
 
 const sidebarLinks = [
   { to: '/admin', icon: HomeIcon, label: 'Dashboard', end: true },
@@ -15,13 +18,56 @@ const sidebarLinks = [
   { to: '/admin/inventory', icon: ArchiveBoxIcon, label: 'Inventory' },
   { to: '/admin/reports', icon: ChartBarIcon, label: 'Reports' },
   { to: '/admin/about', icon: InformationCircleIcon, label: 'About CMS' },
-  { to: '/admin/accounts', icon: UsersIcon, label: 'Accounts' },
+  { to: '/admin/accounts', icon: UsersIcon, label: 'Accounts', superOnly: true },
 ];
 
 export default function AdminLayout() {
-  const { user, logout } = useAuth();
+  const { user, logout, isSuperAdmin } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const notifRef = useRef(null);
+
+  const visibleLinks = sidebarLinks.filter((l) => !l.superOnly || isSuperAdmin);
+
+  const unreadCount = notifications.filter((n) => !n.read_at).length;
+
+  const fetchNotifications = useCallback(async () => {
+    try {
+      const { data } = await getNotifications();
+      setNotifications(data.data || []);
+    } catch { /* ignore */ }
+  }, []);
+
+  useEffect(() => {
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 30000);
+    return () => clearInterval(interval);
+  }, [fetchNotifications]);
+
+  // Close notification dropdown on outside click
+  useEffect(() => {
+    const handler = (e) => {
+      if (notifRef.current && !notifRef.current.contains(e.target)) setNotifOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const markRead = async (id) => {
+    try {
+      await api.put(`/admin/notifications/${id}/read`);
+      setNotifications((prev) => prev.map((n) => n.id === id ? { ...n, read_at: new Date().toISOString() } : n));
+    } catch { /* ignore */ }
+  };
+
+  const markAllRead = async () => {
+    try {
+      await api.put('/admin/notifications/read-all');
+      setNotifications((prev) => prev.map((n) => ({ ...n, read_at: n.read_at || new Date().toISOString() })));
+    } catch { /* ignore */ }
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -31,12 +77,14 @@ export default function AdminLayout() {
   const SidebarContent = ({ onClose }) => (
     <div className="flex h-full flex-col bg-stone-900">
       <div className="flex items-center gap-2.5 px-5 py-5 border-b border-stone-800">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-white font-bold text-xs">TK</div>
+        <div className="flex h-8 w-8 items-center justify-center rounded-full overflow-hidden shrink-0">
+          <img src="/logo.jpg" alt="TK" className="h-8 w-8 rounded-full object-cover" />
+        </div>
         <span className="font-heading text-base font-semibold text-white">Admin Panel</span>
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
-        {sidebarLinks.map((l) => (
+        {visibleLinks.map((l) => (
           <NavLink
             key={l.to}
             to={l.to}
@@ -104,9 +152,53 @@ export default function AdminLayout() {
             <Bars3Icon className="h-5 w-5" />
           </button>
           <div className="flex-1" />
-          <button className="relative rounded-lg p-1.5 text-stone-500 hover:bg-stone-100">
-            <BellIcon className="h-5 w-5" />
-          </button>
+          <div className="relative" ref={notifRef}>
+            <button
+              onClick={() => setNotifOpen(!notifOpen)}
+              className="relative rounded-lg p-1.5 text-stone-500 hover:bg-stone-100"
+            >
+              <BellIcon className="h-5 w-5" />
+              {unreadCount > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </button>
+            {notifOpen && (
+              <div className="absolute right-0 mt-2 w-80 rounded-xl border border-stone-200 bg-white shadow-lg z-50">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-stone-100">
+                  <h3 className="text-sm font-semibold text-stone-900">Notifications</h3>
+                  {unreadCount > 0 && (
+                    <button onClick={markAllRead} className="text-xs text-primary-600 hover:text-primary-700 font-medium">
+                      Mark all read
+                    </button>
+                  )}
+                </div>
+                <div className="max-h-72 overflow-y-auto">
+                  {notifications.length === 0 ? (
+                    <div className="px-4 py-8 text-center text-sm text-stone-400">No notifications</div>
+                  ) : (
+                    notifications.slice(0, 20).map((n) => (
+                      <div
+                        key={n.id}
+                        className={`flex items-start gap-3 px-4 py-3 border-b border-stone-50 transition-colors ${!n.read_at ? 'bg-primary-50/50' : 'hover:bg-stone-50'}`}
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className={`text-sm ${!n.read_at ? 'font-semibold text-stone-900' : 'text-stone-700'}`}>{n.title}</p>
+                          <p className="text-xs text-stone-500 mt-0.5 line-clamp-2">{n.message}</p>
+                        </div>
+                        {!n.read_at && (
+                          <button onClick={() => markRead(n.id)} className="shrink-0 rounded-md p-1 text-stone-400 hover:text-primary-600 hover:bg-primary-50">
+                            <CheckIcon className="h-3.5 w-3.5" />
+                          </button>
+                        )}
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </header>
 
         {/* Page content */}
